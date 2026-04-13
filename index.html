@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule Your Coding Interview — Google Careers</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Google Sans', Arial, Helvetica, sans-serif; background: #f1f3f4; min-height: 100vh; color: #202124; }
+
+  /* Header */
+  .g-header { background: #fff; border-bottom: 1px solid #dadce0; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+  .g-logo { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; text-decoration: none; }
+  .g-logo .b{color:#4285F4}.g-logo .r{color:#EA4335}.g-logo .y{color:#FBBC05}.g-logo .g{color:#34A853}
+  .g-header-meta { font-size: 12px; color: #5f6368; text-align: right; line-height: 1.6; }
+  .secure-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #137333; background: #e6f4ea; border: 1px solid #ceead6; border-radius: 100px; padding: 3px 10px; margin-top: 4px; }
+  .secure-dot { width: 7px; height: 7px; border-radius: 50%; background: #34A853; flex-shrink: 0; }
+
+  /* Layout */
+  .page-wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  /* Section heading */
+  .section-tag { font-size: 11px; color: #4285F4; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+
+  /* Info banner */
+  .info-banner { background: #e8f0fe; border: 1px solid #c5d8fd; border-radius: 8px; padding: 16px 20px; margin-bottom: 22px; display: flex; gap: 14px; align-items: flex-start; }
+  .info-icon { width: 36px; height: 36px; border-radius: 50%; background: #4285F4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .info-icon svg { display: block; }
+  .info-text p { font-size: 13px; color: #1a73e8; font-weight: 700; margin-bottom: 3px; }
+  .info-text span { font-size: 13px; color: #3c4043; line-height: 1.65; }
+
+  /* Card */
+  .card { background: #fff; border: 1px solid #dadce0; border-radius: 8px; padding: 28px 30px; margin-bottom: 18px; }
+  .card-heading { font-size: 16px; font-weight: 700; color: #202124; margin-bottom: 6px; }
+  .card-sub { font-size: 13px; color: #5f6368; margin-bottom: 20px; line-height: 1.6; }
+
+  /* Pills row */
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .pill { border: 1.5px solid #dadce0; border-radius: 100px; padding: 8px 18px; font-size: 13px; color: #3c4043; cursor: pointer; transition: border-color 0.15s, background 0.15s; background: #fff; }
+  .pill:hover { border-color: #4285F4; color: #1a73e8; background: #e8f0fe; }
+  .pill.selected { border-color: #4285F4; background: #e8f0fe; color: #1a73e8; font-weight: 700; }
+
+  /* Time slots grid */
+  .slots-label { font-size: 12px; color: #5f6368; margin-bottom: 10px; letter-spacing: 0.04em; }
+  .slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+  .slot { border: 1.5px solid #dadce0; border-radius: 6px; padding: 9px 6px; font-size: 13px; color: #3c4043; cursor: pointer; text-align: center; background: #fff; transition: all 0.15s; }
+  .slot:hover { border-color: #4285F4; color: #1a73e8; background: #e8f0fe; }
+  .slot.selected { border-color: #4285F4; background: #4285F4; color: #fff; font-weight: 700; }
+  .slot.taken { background: #f8f9fa; color: #bdc1c6; cursor: not-allowed; border-color: #f1f3f4; text-decoration: line-through; }
+
+  /* Form fields */
+  .field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 0; }
+  .field label { font-size: 12px; color: #5f6368; font-weight: 700; letter-spacing: 0.04em; }
+  .field input, .field select { border: 1px solid #dadce0; border-radius: 4px; padding: 9px 12px; font-size: 14px; color: #202124; background: #fff; font-family: inherit; outline: none; transition: border-color 0.15s; }
+  .field input:focus, .field select:focus { border-color: #4285F4; box-shadow: 0 0 0 2px rgba(66,133,244,0.2); }
+  .field-full { grid-column: 1 / -1; }
+
+  /* Timer notice */
+  .timer-notice { background: #fce8e6; border: 1px solid #f5c6c2; border-radius: 6px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .timer-notice svg { flex-shrink: 0; }
+  .timer-notice p { font-size: 13px; color: #c5221f; line-height: 1.6; }
+  .timer-notice strong { font-weight: 700; }
+
+  /* Rules list */
+  .rules { list-style: none; padding: 0; }
+  .rules li { font-size: 13px; color: #3c4043; padding: 7px 0; border-bottom: 1px solid #f1f3f4; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+  .rules li:last-child { border-bottom: none; }
+  .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: #4285F4; margin-top: 6px; flex-shrink: 0; }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid #e8eaed; margin: 20px 0; }
+
+  /* CTA Button */
+  .btn-primary { width: 100%; background: #4285F4; color: #fff; border: none; border-radius: 4px; padding: 13px 24px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
+  .btn-primary:hover { background: #1a73e8; }
+  .btn-primary:disabled { background: #dadce0; color: #bdc1c6; cursor: not-allowed; }
+
+  /* Colour bar */
+  .g-colorbar { display: flex; height: 4px; }
+  .g-colorbar div { flex: 1; }
+  .cb-b { background: #4285F4; }
+  .cb-r { background: #EA4335; }
+  .cb-y { background: #FBBC05; }
+  .cb-g { background: #34A853; }
+
+  /* Summary row */
+  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f3f4; font-size: 13px; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { color: #5f6368; }
+  .summary-value { color: #202124; font-weight: 700; }
+
+  /* ---- SUCCESS STATE ---- */
+  .success-wrap { display: none; max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+  .success-hero { background: #fff; border: 1px solid #dadce0; border-radius: 8px; padding: 44px 32px; text-align: center; margin-bottom: 18px; }
+  .check-circle { width: 72px; height: 72px; border-radius: 50%; background: #e6f4ea; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .success-title { font-size: 22px; font-weight: 700; color: #202124; margin-bottom: 8px; }
+  .success-sub { font-size: 14px; color: #5f6368; line-height: 1.7; max-width: 420px; margin: 0 auto 24px; }
+  .success-ref { font-size: 12px; color: #9aa0a6; margin-top: 12px; }
+  .success-ref strong { color: #5f6368; }
+  .confirm-card { background: #fff; border: 1px solid #dadce0; border-radius: 8px; padding: 22px 28px; margin-bottom: 18px; }
+  .confirm-card .card-heading { margin-bottom: 14px; }
+  .next-steps { background: #e8f0fe; border: 1px solid #c5d8fd; border-radius: 8px; padding: 18px 22px; margin-bottom: 18px; }
+  .next-steps p { font-size: 13px; color: #1a73e8; font-weight: 700; margin-bottom: 10px; }
+  .next-steps ul { list-style: none; }
+  .next-steps ul li { font-size: 13px; color: #3c4043; padding: 5px 0; display: flex; gap: 8px; line-height: 1.6; }
+  .step-num { width: 18px; height: 18px; border-radius: 50%; background: #4285F4; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .g-footer { border-top: 1px solid #e8eaed; padding: 16px 32px; background: #fff; text-align: center; font-size: 11px; color: #9aa0a6; }
+  .g-footer a { color: #1a73e8; text-decoration: none; }
+  .cal-icon { background: #e8f0fe; border: 1px solid #c5d8fd; border-radius: 6px; padding: 10px 20px; font-size: 13px; color: #1a73e8; font-weight: 700; cursor: pointer; border-style: solid; display: inline-block; margin-top: 12px; }
+
+  @media (max-width: 520px) {
+    .field-group { grid-template-columns: 1fr; }
+    .slots-grid { grid-template-columns: repeat(3, 1fr); }
+    .card { padding: 20px 18px; }
+    .g-header { padding: 12px 16px; }
+    .g-header-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="g-header">
+  <span class="g-logo">
+    <span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span>
+  </span>
+  <div class="g-header-meta">
+    Careers — Interview Portal<br>
+    <span class="secure-badge">
+      <span class="secure-dot"></span>
+      Secure &amp; Encrypted Session
+    </span>
+  </div>
+</header>
+
+<!-- Google colour bar -->
+<div class="g-colorbar">
+  <div class="cb-b"></div><div class="cb-r"></div><div class="cb-y"></div><div class="cb-g"></div>
+</div>
+
+<!-- ===================== SCHEDULING FORM ===================== -->
+<div class="page-wrap" id="form-wrap">
+
+  <!-- Page title -->
+  <div style="margin-bottom: 22px;">
+    <div class="section-tag">Software Engineering — Coding Round</div>
+    <h1 style="font-size: 24px; font-weight: 700; color: #202124; margin-bottom: 6px;">Schedule your coding interview</h1>
+    <p style="font-size: 14px; color: #5f6368; line-height: 1.7;">Hi <strong style="color:#202124;">Anandhappriya</strong>, choose a date and time that works best for you. You can attend this at your own pace — the 90-minute timer only starts once you begin the assessment.</p>
+  </div>
+
+  <!-- Info banner -->
+  <div class="info-banner">
+    <div class="info-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2a7 7 0 100 14A7 7 0 009 2zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V4.5h1.5V6z" fill="#fff"/>
+      </svg>
+    </div>
+    <div class="info-text">
+      <p>Referred candidate — priority scheduling</p>
+      <span>You were referred by a Googler and receive priority access to scheduling slots. Select any available time that suits you.</span>
+    </div>
+  </div>
+
+  <!-- Timer notice -->
+  <div class="timer-notice">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="10" r="7" stroke="#c5221f" stroke-width="1.5"/>
+      <path d="M9 7v3.5l2 2" stroke="#c5221f" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M7 2h4M9 2v1.5" stroke="#c5221f" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <p><strong>90-minute time limit</strong> — The countdown begins only when you click "Start Assessment" inside the interview portal. Schedule at your convenience; the clock does not start at your scheduled time.</p>
+  </div>
+
+  <!-- Step 1: Select date -->
+  <div class="card">
+    <div class="card-heading">Step 1 — Select a date</div>
+    <div class="card-sub">Choose from available dates for the next two weeks. All times are in your local timezone.</div>
+    <div class="pills" id="date-pills">
+      <div class="pill" onclick="selectDate(this, 'Mon, Apr 14')">Mon, Apr 14</div>
+      <div class="pill" onclick="selectDate(this, 'Tue, Apr 15')">Tue, Apr 15</div>
+      <div class="pill" onclick="selectDate(this, 'Wed, Apr 16')">Wed, Apr 16</div>
+      <div class="pill" onclick="selectDate(this, 'Thu, Apr 17')">Thu, Apr 17</div>
+      <div class="pill" onclick="selectDate(this, 'Fri, Apr 18')">Fri, Apr 18</div>
+      <div class="pill" onclick="selectDate(this, 'Mon, Apr 21')">Mon, Apr 21</div>
+      <div class="pill" onclick="selectDate(this, 'Tue, Apr 22')">Tue, Apr 22</div>
+      <div class="pill" onclick="selectDate(this, 'Wed, Apr 23')">Wed, Apr 23</div>
+      <div class="pill" onclick="selectDate(this, 'Thu, Apr 24')">Thu, Apr 24</div>
+      <div class="pill" onclick="selectDate(this, 'Fri, Apr 25')">Fri, Apr 25</div>
+    </div>
+
+    <!-- Step 2: Time slots -->
+    <div id="time-section" style="display:none;">
+      <div class="divider"></div>
+      <div class="card-heading" style="margin-bottom:6px;">Step 2 — Choose a time slot</div>
+      <div class="card-sub">Slots shown in your local time. Greyed slots are already taken.</div>
+      <div class="slots-label">Morning</div>
+      <div class="slots-grid">
+        <div class="slot" onclick="selectSlot(this, '8:00 AM')">8:00 AM</div>
+        <div class="slot" onclick="selectSlot(this, '8:30 AM')">8:30 AM</div>
+        <div class="slot taken">9:00 AM</div>
+        <div class="slot" onclick="selectSlot(this, '9:30 AM')">9:30 AM</div>
+        <div class="slot taken">10:00 AM</div>
+        <div class="slot" onclick="selectSlot(this, '10:30 AM')">10:30 AM</div>
+        <div class="slot" onclick="selectSlot(this, '11:00 AM')">11:00 AM</div>
+        <div class="slot taken">11:30 AM</div>
+      </div>
+      <div class="slots-label" style="margin-top:12px;">Afternoon</div>
+      <div class="slots-grid">
+        <div class="slot taken">12:00 PM</div>
+        <div class="slot" onclick="selectSlot(this, '12:30 PM')">12:30 PM</div>
+        <div class="slot" onclick="selectSlot(this, '1:00 PM')">1:00 PM</div>
+        <div class="slot taken">1:30 PM</div>
+        <div class="slot" onclick="selectSlot(this, '2:00 PM')">2:00 PM</div>
+        <div class="slot" onclick="selectSlot(this, '2:30 PM')">2:30 PM</div>
+        <div class="slot taken">3:00 PM</div>
+        <div class="slot" onclick="selectSlot(this, '3:30 PM')">3:30 PM</div>
+      </div>
+      <div class="slots-label" style="margin-top:12px;">Evening</div>
+      <div class="slots-grid">
+        <div class="slot" onclick="selectSlot(this, '4:00 PM')">4:00 PM</div>
+        <div class="slot taken">4:30 PM</div>
+        <div class="slot" onclick="selectSlot(this, '5:00 PM')">5:00 PM</div>
+        <div class="slot" onclick="selectSlot(this, '5:30 PM')">5:30 PM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Confirm details -->
+  <div class="card" id="details-card" style="display:none;">
+    <div class="card-heading">Step 3 — Confirm your details</div>
+    <div class="card-sub">Please verify the information below before confirming your slot.</div>
+
+    <div class="field-group">
+      <div class="field">
+        <label>FULL NAME</label>
+        <input type="text" value="Anandhappriya" id="fname" />
+      </div>
+      <div class="field">
+        <label>CANDIDATE ID</label>
+        <input type="text" value="GGL-REF-2026-7741" readonly style="background:#f8f9fa; color:#5f6368;" />
+      </div>
+      <div class="field field-full">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" placeholder="your@email.com" id="femail" />
+      </div>
+      <div class="field">
+        <label>TIMEZONE</label>
+        <select id="ftimezone">
+          <option>IST — India Standard Time (UTC+5:30)</option>
+          <option>PST — Pacific Standard Time (UTC-8)</option>
+          <option>EST — Eastern Standard Time (UTC-5)</option>
+          <option>GMT — Greenwich Mean Time (UTC+0)</option>
+          <option>CET — Central European Time (UTC+1)</option>
+          <option>JST — Japan Standard Time (UTC+9)</option>
+          <option>AEST — Australia Eastern (UTC+10)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>PREFERRED LANGUAGE</label>
+        <select id="flang">
+          <option>Python</option>
+          <option>Java</option>
+          <option>C++</option>
+          <option>JavaScript</option>
+          <option>Go</option>
+          <option>Kotlin</option>
+          <option>Swift</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Booking summary -->
+    <div style="margin-bottom: 20px;">
+      <div style="font-size: 12px; color: #5f6368; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 12px;">BOOKING SUMMARY</div>
+      <div class="summary-row">
+        <span class="summary-label">Round</span>
+        <span class="summary-value">Coding Interview — Round 1</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Date</span>
+        <span class="summary-value" id="summary-date">—</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Time</span>
+        <span class="summary-value" id="summary-time">—</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Duration</span>
+        <span class="summary-value">90 minutes (timer starts on entry)</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Format</span>
+        <span class="summary-value">Online — Google Meet + shared editor</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Type</span>
+        <span class="summary-value">Self-paced — attend at your own pace</span>
+      </div>
+    </div>
+
+    <!-- Ground rules -->
+    <div style="background:#f8f9fa; border:1px solid #e8eaed; border-radius:6px; padding:16px 18px; margin-bottom:20px;">
+      <div style="font-size:12px; color:#5f6368; font-weight:700; letter-spacing:0.06em; margin-bottom:10px;">ASSESSMENT RULES</div>
+      <ul class="rules">
+        <li><span class="rule-dot"></span>The 90-minute countdown begins only when you click "Start Assessment" in the portal — not at your scheduled time.</li>
+        <li><span class="rule-dot"></span>You may attempt the assessment any time on your scheduled date, within the availability window.</li>
+        <li><span class="rule-dot"></span>All work must be your own. External assistance, AI tools, or shared solutions will result in disqualification.</li>
+        <li><span class="rule-dot"></span>A Google Meet link will be emailed to you 1 hour before your scheduled slot for the live coding environment.</li>
+        <li><span class="rule-dot"></span>You may code in any language. The shared editor supports syntax highlighting for all major languages.</li>
+      </ul>
+    </div>
+
+    <!-- Consent -->
+    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:20px;">
+      <input type="checkbox" id="consent" style="margin-top:3px; accent-color:#4285F4; width:15px; height:15px; flex-shrink:0;" />
+      <label for="consent" style="font-size:13px; color:#3c4043; line-height:1.65; cursor:pointer;">I confirm that the details above are correct and I agree to Google's <a href="https://careers.google.com" style="color:#1a73e8;">Interview Terms &amp; Conditions</a>. I understand that this slot is reserved for me and may not be transferred.</label>
+    </div>
+
+    <button class="btn-primary" id="confirm-btn" onclick="confirmBooking()" disabled>Confirm &amp; Schedule Interview</button>
+    <p style="font-size:11px; color:#9aa0a6; text-align:center; margin-top:10px;">A confirmation email will be sent to your registered address immediately after scheduling.</p>
+  </div>
+
+</div>
+
+<!-- ===================== SUCCESS STATE ===================== -->
+<div class="success-wrap" id="success-wrap">
+
+  <!-- Google colour bar -->
+  <div class="g-colorbar" style="border-radius:8px 8px 0 0; overflow:hidden; margin-bottom:-1px; position:relative; z-index:1;">
+    <div class="cb-b"></div><div class="cb-r"></div><div class="cb-y"></div><div class="cb-g"></div>
+  </div>
+
+  <div class="success-hero" style="border-top-left-radius:0; border-top-right-radius:0; border-top:none;">
+    <div class="check-circle">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <path d="M8 19l7 7L28 12" stroke="#34A853" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="success-title">Interview successfully scheduled!</div>
+    <p class="success-sub">You're all set, Anandhappriya. Your Google coding interview has been confirmed. A calendar invite and Google Meet link have been sent to your email address.</p>
+    <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:4px;">
+      <span style="background:#e8f0fe; color:#1a73e8; font-size:12px; font-weight:700; border-radius:100px; padding:4px 14px;" id="suc-date-badge">—</span>
+      <span style="background:#e8f0fe; color:#1a73e8; font-size:12px; font-weight:700; border-radius:100px; padding:4px 14px;" id="suc-time-badge">—</span>
+      <span style="background:#e6f4ea; color:#137333; font-size:12px; font-weight:700; border-radius:100px; padding:4px 14px;">90 min · Self-paced</span>
+    </div>
+    <p class="success-ref">Reference ID: <strong id="suc-ref">GGL-REF-2026-7741</strong></p>
+  </div>
+
+  <!-- Confirmation summary -->
+  <div class="confirm-card">
+    <div class="card-heading">Booking confirmation</div>
+    <div class="summary-row"><span class="summary-label">Candidate</span><span class="summary-value">Anandhappriya</span></div>
+    <div class="summary-row"><span class="summary-label">Candidate ID</span><span class="summary-value">GGL-REF-2026-7741</span></div>
+    <div class="summary-row"><span class="summary-label">Round</span><span class="summary-value">Coding Interview — Round 1</span></div>
+    <div class="summary-row"><span class="summary-label">Date &amp; Time</span><span class="summary-value" id="suc-datetime">—</span></div>
+    <div class="summary-row"><span class="summary-label">Time limit</span><span class="summary-value">90 minutes (starts on entry)</span></div>
+    <div class="summary-row"><span class="summary-label">Platform</span><span class="summary-value">Google Meet + shared coding editor</span></div>
+    <div class="summary-row"><span class="summary-label">Language</span><span class="summary-value" id="suc-lang">Python</span></div>
+    <div class="summary-row"><span class="summary-label">Timezone</span><span class="summary-value" id="suc-tz">IST (UTC+5:30)</span></div>
+    <div class="summary-row"><span class="summary-label">Recruiter</span><span class="summary-value">Jordan Hayes — <a href="mailto:j.hayes@google.com" style="color:#1a73e8; text-decoration:none;">j.hayes@google.com</a></span></div>
+  </div>
+
+  <!-- Next steps -->
+  <div class="next-steps">
+    <p>What to do before your interview</p>
+    <ul>
+      <li><span class="step-num">1</span>Check your inbox — a Google Meet link will arrive 1 hour before your scheduled slot.</li>
+      <li><span class="step-num">2</span>Practise data structures &amp; algorithms on <a href="https://techdevguide.withgoogle.com" style="color:#1a73e8;">Google Tech Dev Guide</a> and LeetCode (medium–hard).</li>
+      <li><span class="step-num">3</span>Test your camera and microphone on Google Meet beforehand.</li>
+      <li><span class="step-num">4</span>When you're ready, click "Start Assessment" in the portal — your 90-minute timer will begin then.</li>
+    </ul>
+  </div>
+
+  <!-- Add to calendar -->
+  <div style="text-align:center; margin-bottom:8px;">
+    <span class="cal-icon">+ Add to Google Calendar</span>
+  </div>
+
+  <p style="font-size:12px; color:#9aa0a6; text-align:center; line-height:1.7;">Need to reschedule? Contact <a href="mailto:j.hayes@google.com" style="color:#1a73e8;">j.hayes@google.com</a> at least 24 hours before your slot.</p>
+
+</div>
+
+<!-- Footer -->
+<footer class="g-footer">
+  <p>&copy; 2026 Google LLC · <a href="https://careers.google.com">careers.google.com</a> · <a href="https://policies.google.com/privacy">Privacy</a> · <a href="https://policies.google.com/terms">Terms</a></p>
+  <p style="margin-top:4px;">1600 Amphitheatre Parkway, Mountain View, CA 94043</p>
+</footer>
+
+<script>
+  var selectedDate = '';
+  var selectedTime = '';
+
+  function selectDate(el, date) {
+    document.querySelectorAll('#date-pills .pill').forEach(function(p){ p.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedDate = date;
+    document.getElementById('time-section').style.display = 'block';
+    document.getElementById('details-card').style.display = 'none';
+    document.querySelectorAll('.slot:not(.taken)').forEach(function(s){ s.classList.remove('selected'); });
+    selectedTime = '';
+    updateSummary();
+  }
+
+  function selectSlot(el, time) {
+    document.querySelectorAll('.slot:not(.taken)').forEach(function(s){ s.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedTime = time;
+    document.getElementById('details-card').style.display = 'block';
+    updateSummary();
+    document.getElementById('details-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function updateSummary() {
+    document.getElementById('summary-date').textContent = selectedDate || '—';
+    document.getElementById('summary-time').textContent = selectedTime || '—';
+  }
+
+  document.getElementById('consent').addEventListener('change', function() {
+    var btn = document.getElementById('confirm-btn');
+    btn.disabled = !(this.checked && selectedDate && selectedTime && document.getElementById('femail').value.trim());
+  });
+
+  document.getElementById('femail').addEventListener('input', function() {
+    var btn = document.getElementById('confirm-btn');
+    btn.disabled = !(document.getElementById('consent').checked && selectedDate && selectedTime && this.value.trim());
+  });
+
+  function confirmBooking() {
+    if (!selectedDate || !selectedTime) return;
+    var lang = document.getElementById('flang').value;
+    var tz = document.getElementById('ftimezone').value;
+    var tzShort = tz.split('—')[0].trim();
+    document.getElementById('suc-date-badge').textContent = selectedDate;
+    document.getElementById('suc-time-badge').textContent = selectedTime;
+    document.getElementById('suc-datetime').textContent = selectedDate + ' · ' + selectedTime + ' ' + tzShort;
+    document.getElementById('suc-lang').textContent = lang;
+    document.getElementById('suc-tz').textContent = tz.replace('—', '·');
+    document.getElementById('form-wrap').style.display = 'none';
+    document.getElementById('success-wrap').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
